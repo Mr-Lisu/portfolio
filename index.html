@@ -22,23 +22,39 @@
         </div>
     </header>
 
+    <section class="hero">
+        </section>
     <main class="container">
 
         <section class="gallery-grid">
+            
             <div class="gallery-item">
-                <img src="images/work1.jpg" alt="作品1の説明">
-                <h3>Comming Soon ...</h3>
+                <a href="images/work1.jpg" class="lightbox-trigger">
+                    <div class="gallery-image-block">
+                        <img src="images/work1.jpg" alt="作品1の説明">
+                    </div>
+                </a>
+                <h3>Comming Soon ...</h3> 
             </div>
             
             <div class="gallery-item">
-                <img src="images/work2.jpg" alt="作品2の説明">
-                <h3>Comming Soon ...</h3>
+                <a href="images/work2.jpg" class="lightbox-trigger">
+                    <div class="gallery-image-block">
+                        <img src="images/work2.jpg" alt="作品2の説明">
+                    </div>
+                </a>
+                <h3>Comming Soon ...</h3> 
             </div>
             
             <div class="gallery-item">
-                <img src="images/work3.jpg" alt="作品3の説明">
+                <a href="images/work3.jpg" class="lightbox-trigger">
+                    <div class="gallery-image-block">
+                        <img src="images/work3.jpg" alt="作品3の説明">
+                    </div>
+                </a>
                 <h3>Comming Soon ...</h3>
             </div>
+
         </section>
 
     </main>
@@ -48,6 +64,13 @@
             <p>&copy; 2025 Mr-Lisu. All Rights Reserved.</p>
         </div>
     </footer>
-
+    
+    <div id="lightbox-overlay" class="lightbox">
+        <div id="lightbox-content">
+            <span id="lightbox-close" class="lightbox-close">&times;</span>
+            <img id="lightbox-image" src="" alt="拡大画像">
+            </div>
+    </div>
+    <script src="main.js"></script> 
 </body>
 </html>

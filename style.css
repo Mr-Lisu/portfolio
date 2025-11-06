@@ -15,7 +15,7 @@ body {
 
 /* --- レイアウト用コンテナ --- */
 .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -23,18 +23,9 @@ body {
 /* --- ヘッダーとナビゲーション --- */
 header {
     background-color: #111; 
-    padding: 5px 0; /* ← [変更] 10pxから5pxに (より短く) */
+    padding: 5px 0; 
     border-bottom: 1px solid #333; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-    
-    /* * ↓ [削除] 以下の3行を削除しました。
-     * これでヘッダーは固定されず、スクロールと一緒についてこなくなります。
-     */
-    /*
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    */
 }
 
 header .container {
@@ -45,7 +36,7 @@ header .container {
 
 header h1 {
     margin: 0;
-    font-size: 1.5em; /* ← [変更] 1.8emから1.5emに (小さく) */
+    font-size: 1.5em; 
     color: #ffffff;
 }
 
@@ -65,74 +56,108 @@ header nav a {
     color: #f0f0f0;
     font-weight: bold;
     transition: color 0.3s ease;
-    font-size: 0.9em; /* ← [追加] ナビの文字も小さく */
+    font-size: 0.9em; 
 }
 
 header nav a:hover {
     color: #ffffff; 
 }
 
+/* --- 自己紹介 (Hero) --- */
+/* ↓↓↓ [変更] "hero"セクションを丸ごと書き換えました ↓↓↓ */
+.hero {
+    /* (1) 1920x1080 (16:9) の比率を保つ */
+    aspect-ratio: 16 / 9;
+    width: 100%; /* 画面の横幅いっぱいに */
+    
+    /* (2) 背景画像 */
+    background-color: #333; /* 画像読み込み中の色 */
+    
+    /* * [要確認] 画像のパスを 'images/profile.jpg' にしています。
+     * もし 'index.html' と同じ場所なら 'profile.jpg' に修正してください。
+     */
+    background-image: url('images/profile.jpg'); 
+    
+    background-size: cover; /* 縦横比を保ちつつ全体を覆う */
+    background-position: center center; /* 画像の中央を表示 */
+}
+
 /* --- メインコンテンツとセクション --- */
 main {
-     /* ↓ [変更] ヘッダーが固定でなくなったため、上部の余白を調整 */
     padding-top: 20px;
 }
 
 /* --- ギャラリー（CSS Grid） --- */
-/*
- * ↓ HTMLから削除しましたが、CSSは残しておきます。
- * 今後「描いた絵」セクションで再び使えるためです。
- */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    margin-top: 30px; /* ヒーロー画像との空間 */
 }
 
+/* .gallery-item 自体は「枠」の役割のみに */
 .gallery-item {
+    /* * スタイル（枠線、影、角丸など）は
+     * 中の .gallery-image-block に移動しました。
+     */
+}
+
+/* [新設] 画像を囲む「ブロック」のスタイル */
+.gallery-image-block {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    overflow: hidden; /* 中の画像を角丸にするため */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.gallery-item:hover {
+a.lightbox-trigger {
+    text-decoration: none; /* リンクの下線を消す */
+    display: block; /* aタグをブロック要素にする */
+}
+
+/* ホバー効果は a タグ経由で指定 */
+a.lightbox-trigger:hover .gallery-image-block {
     transform: translateY(-5px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.gallery-item img,
-.gallery-item iframe {
+/* セレクタを .gallery-image-block の中に変更 */
+.gallery-image-block img,
+.gallery-image-block iframe {
     width: 100%;
     height: auto;
     display: block;
     aspect-ratio: 16 / 9;
 }
 
-.gallery-item img {
+.gallery-image-block img {
     aspect-ratio: auto;
 }
 
 
 .gallery-item h3,
 .gallery-item p {
-    padding: 0 15px;
+    /* [変更] ブロックの外に出たので左右パディングを削除 */
+    /* padding: 0 15px; */
 }
 
 .gallery-item h3 {
     margin-bottom: 5px;
+    margin-top: 10px; /* [追加] 画像ブロックとの余白 */
+    text-align: center; /* [追加] タイトルを中央揃え */
 }
 .gallery-item p {
     margin-top: 0;
     font-size: 0.9em;
     color: #666;
+    text-align: center; /* [追加] h3と合わせて中央揃えに */
 }
 
 /* --- フッター --- */
 footer {
     text-align: center;
-    padding: 30px 0;
+    padding: 20px 0;
     margin-top: 30px;
     background-color: #333;
     color: #f8f8f8;
@@ -151,4 +176,86 @@ footer p {
     header nav {
         margin-top: 10px;
     }
+}
+
+/* --- ライトボックス（モーダル） --- */
+.lightbox {
+    /* (1) 普段は隠しておく */
+    visibility: hidden;
+    opacity: 0;
+    
+    /* (2) 画面全体を覆う黒い背景（オーバーレイ） */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* 黒の80%透明 */
+
+    /* (3) 中身を中央に配置する */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* (4) 表示/非表示のアニメーション */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    
+    /* (5) 一番手前に表示 */
+    z-index: 1000; 
+}
+
+/* JSで .show クラスが付いたときに表示する */
+.lightbox.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+#lightbox-content {
+    position: relative; /* Xボタンの基準点。これだけは残す */
+    
+    /* * 白い背景、パディング、影、サイズ制限など、
+     * すべてのスタイルを削除しました。
+     * これでコンテナは "透明" になります。
+     */
+}
+
+/* 拡大画像 */
+#lightbox-image {
+    display: block; /* 画像下の余計な隙間を防止 */
+    
+    /* [変更] サイズ制限をコンテナから画像自体に移動 */
+    max-width: 95vw;    /* 画面幅の90%まで */
+    max-height: 95vh;   /* 画面高の90%まで */
+
+    object-fit: contain;
+}
+
+/* 右上の「×」閉じるボタン */
+.lightbox-close {
+    position: absolute;
+    top: -15px;  /* 白い枠の外側に配置 */
+    right: -125px; /* 白い枠の外側に配置 */
+    
+    font-size: 3em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #333;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    
+    /* ×を中央に配置 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1; /* 文字の高さを調整 */
+    padding-bottom: 8px;
+    padding-left: 3px;
+
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.lightbox-close:hover {
+    transform: scale(1.1);
 }
